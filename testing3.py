@@ -1,4 +1,4 @@
-#The goal of this one is to try to get data over multiple months or at least consolidate the hourly data into daily data
+#The goal of this one is to try to get data over A SINGLE month
 from bokeh.plotting import figure, show
 from bokeh.layouts import gridplot
 import random
@@ -56,7 +56,7 @@ for line in dataFile:
     time2 = Time(t1)
 
 
-    if(date2.getStr() == "2020-01-01"): #For now, we dont want too much data so we're making it stop after the first day
+    if(date2.getStr() == "2019-02-01"): #For now, we dont want too much data so we're making it stop after the first day
         break
     # 2019-01-06
     # 2019-02-28
@@ -120,13 +120,15 @@ for i in range(len(dateIndex)):
         
 
 divisionReduce = 10**2
-iScale = 1000/len(dateIndex)
+length = 1000
+height = 2500
+iScale = length/len(dateIndex)
 # iScale = 1
 
-energyConsFig = figure(width = 5000, title = "Daily Energy Consumption vs. Time", x_axis_label = "Time", y_axis_label = "Energy (Megawatts) * " + str(divisionReduce))
+energyConsFig = figure(width = 2000, title = "Daily Energy Consumption vs. Time in Romania (2019)", x_axis_label = "Time", y_axis_label = "Energy (Megawatts) * " + str(divisionReduce))
 
 energyConsFig.line((0, 0), (0, 2500), line_width = 2) #Yaxis
-energyConsFig.line((0, 1000), (0, 0), line_width = 2) #Xaxis
+energyConsFig.line((0, length), (0, 0), line_width = 2) #Xaxis
 
 
 # '''
@@ -161,6 +163,11 @@ for i in range(len(dateIndex)):
     energyConsFig.line((currentXCoord, currentXCoord), (0, -100), color = "black", line_width = 1) #the tick markers
     energyConsFig.text(x = currentXCoord, y = -100, text = [dateIndex[i][0].getStr()], text_font_size = "7px", angle = -3.14/2)
     ''''''
+
+    #Adding Month Markers
+    if(i>0 and not (dateIndex[i][0].dataList[1] == dateIndex[i-1][0].dataList[1])): #0, 1, 2
+        energyConsFig.line((currentXCoord, currentXCoord), (0, height), color = "black", line_width = 2)
+
 
 # colorRand = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
 energyConsFig.line(consDayLineX, consDayLineY, line_width = 2, color = "red")
