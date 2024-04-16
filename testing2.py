@@ -57,11 +57,11 @@ for line in dataFile:
     time2 = Time(t1)
 
 
-    # if(date2.getStr() == "2020-01-01"): #For now, we dont want too much data so we're making it stop after the first day
-    #     break
-    if(not (str(date2.dataList[0]) == "2020")):
-        # print(date2.dataList[0])
-        pass
+    # # if(date2.getStr() == "2020-01-01"): #For now, we dont want too much data so we're making it stop after the first day
+    # #     break
+    # if(not (str(date2.dataList[0]) == "2020")):
+    #     # print(date2.dataList[0])
+    #     pass
     # if(date2.getStr() == "2022-01-01"): #For now, we dont want too much data so we're making it stop after the first day
     #     break
 
@@ -127,15 +127,17 @@ for i in range(len(dateIndex)):
         
 
 divisionReduce = 10**2
-length = 1000
+length = 2000
 height = 2500
 iScale = length/len(dateIndex)
 # iScale = 1
 
-energyConsFig = figure(width = 5000, title = "Daily Energy Consumption vs. Time in Romania (2019)", x_axis_label = "Time", y_axis_label = "Energy (Megawatts) * " + str(divisionReduce))
+energyConsFig = figure(width = 12000, height = 2000, title = "Daily Energy Consumption vs. Time in Romania (2019-2024)", x_axis_label = "Time", y_axis_label = "Energy (Megawatts) * " + str(divisionReduce))
 
 energyConsFig.line((0, 0), (0, 2500), line_width = 2) #Yaxis
+energyConsFig.text( x = -2, y = height/2-100, text = ["Energy (Megawatts) * " + str(divisionReduce)], angle = 3.14/2, text_font_size = "15px", text_color = "black")
 energyConsFig.line((0, length), (0, 0), line_width = 2) #Xaxis
+energyConsFig.text( x = length/2, y = -200, text = ["Time (Day)"], angle =0, text_font_size = "15px", text_color = "black")
 
 
 # '''
@@ -166,7 +168,7 @@ solarDayLineFinalCoord = 0
 
 
 for i in range(len(dateIndex)):
-
+    
 
 
     currentXCoord = i*iScale #subject to change to scale the graph
@@ -210,11 +212,18 @@ for i in range(len(dateIndex)):
 
 
 
-    '''
+    # '''
     #Day Markers
-    energyConsFig.line((currentXCoord, currentXCoord), (0, -100), color = "black", line_width = 1) #the tick markers
-    energyConsFig.text(x = currentXCoord, y = -100, text = [ str((dateIndex[i][0].dataList[1])) + "/" + str((dateIndex[i][0].dataList[2])) ], text_font_size = "10px", angle = -3.14/2)
-    '''
+    # if(     str((dateIndex[i][0].dataList[1])) == "01" and str(dateIndex[i][0].dataList[2]) == "01"     ):
+    #     print ("printing out the tick mark for 01/01 at: " + str(i))
+    #     print( str(dateIndex[i][0].dataList[1]) + " "+ str(dateIndex[i][0].dataList[2]))
+    #     print(dateIndex[i][0].getStr())
+    if(not i == 0): #edge case where i=0 2019-01-01 would print twice
+        energyConsFig.line((currentXCoord, currentXCoord), (0, -30), color = "black", line_width = 0.5) #the tick markers
+        energyConsFig.text(x = currentXCoord-0.07, y = -40, text = [ str((dateIndex[i][0].dataList[1])) + "/" + str((dateIndex[i][0].dataList[2])) ], text_font_size = "4px", angle = -3.14/2)
+    # energyConsFig.text(x = currentXCoord-0.07, y = -70, text = [ str((dateIndex[i][0].dataList[2])) ], text_font_size = "4px", angle = -3.14/2)
+
+    # '''
 
     #Adding Month Markers
     if(i>0 and not (dateIndex[i][0].dataList[1] == dateIndex[i-1][0].dataList[1])): #0, 1, 2
@@ -248,7 +257,8 @@ for i in range(len(dateIndex)):
         energyConsFig.text(x=currentXCoord, y = height-100, text = [monthText], text_color = "black", text_font_size = "13px")
     #Adding Year Markers:
     if(i == 0 or not (dateIndex[i][0].dataList[0] == dateIndex[i-1][0].dataList[0])):
-        energyConsFig.text(x=currentXCoord, y = height, text = [dateIndex[i][0].dataList[0]], text_color = "black", text_font_size = "20px")
+        energyConsFig.text(x=currentXCoord, y = height, text = [dateIndex[i][0].dataList[0]], text_color = "maroon", text_font_size = "20px")
+        energyConsFig.line((currentXCoord, currentXCoord), (0, height), color = "maroon", line_width = 4)
 
        
 energyConsFig.text(x=0, y = height-100, text = ["January"], text_color = "black", text_font_size = "15px")
